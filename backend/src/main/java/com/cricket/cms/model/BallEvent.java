@@ -63,4 +63,30 @@ public class BallEvent {
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    public BallEvent(Innings innings, int overNumber, int ballNumber, Player batsman, Player bowler,
+            BallOutcome outcome) {
+        this.innings = innings;
+        this.overNumber = overNumber;
+        this.ballNumber = ballNumber;
+        this.batsman = batsman;
+        this.bowler = bowler;
+        this.runs = outcome.getRuns();
+        this.extraType = outcome.getExtraType();
+        this.extraRuns = outcome.getExtraRuns();
+        this.wicket = outcome.isWicket();
+    }
+
+    public int totalRuns() {
+        return runs + extraRuns;
+    }
+
+    public boolean isLegalDelivery() {
+        return extraType == ExtraType.NONE;
+    }
+
+    // A no-ball counts as a ball faced by the batsman, a wide does not.
+    public boolean countsAsBallFaced() {
+        return extraType != ExtraType.WIDE;
+    }
 }

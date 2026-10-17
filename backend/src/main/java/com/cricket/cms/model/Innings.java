@@ -41,4 +41,28 @@ public class Innings {
 
     @Column(nullable = false)
     private boolean completed;
+
+    // Runs needed to win, only set for the second innings.
+    private Integer target;
+
+    // Null once the batting side is all out.
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "striker_id")
+    private Player striker;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "non_striker_id")
+    private Player nonStriker;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bowler_id")
+    private Player bowler;
+
+    public Innings(Match match, int inningsNumber, Team battingTeam, Team bowlingTeam, Integer target) {
+        this.match = match;
+        this.inningsNumber = inningsNumber;
+        this.battingTeam = battingTeam;
+        this.bowlingTeam = bowlingTeam;
+        this.target = target;
+    }
 }
