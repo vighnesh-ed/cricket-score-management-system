@@ -2,17 +2,6 @@
 
 export type MatchStatus = 'SCHEDULED' | 'LIVE' | 'COMPLETED'
 
-export type BallOutcome =
-  | 'DOT'
-  | 'ONE'
-  | 'TWO'
-  | 'THREE'
-  | 'FOUR'
-  | 'SIX'
-  | 'WICKET'
-  | 'WIDE'
-  | 'NO_BALL'
-
 export interface TeamResponse {
   id: number
   name: string
@@ -163,12 +152,6 @@ export interface PlayerStatsResponse {
   oversBowled: string
   runsConceded: number
   economy: number
-}
-
-export interface BallRequest {
-  outcome: BallOutcome
-  batsmanId?: number | null
-  bowlerId?: number | null
 }
 
 export interface ErrorResponse {
