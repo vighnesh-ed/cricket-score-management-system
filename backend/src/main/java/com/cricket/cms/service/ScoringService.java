@@ -20,6 +20,7 @@ import com.cricket.cms.repository.PlayerRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +36,7 @@ public class ScoringService {
     private final InningsRepository inningsRepository;
     private final PlayerRepository playerRepository;
     private final BallEventRepository ballEventRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public void startMatch(Long matchId) {
@@ -44,6 +46,7 @@ public class ScoringService {
         }
         match.setStatus(MatchStatus.LIVE);
         startInnings(match, 1, match.getTeamA(), match.getTeamB(), null);
+        eventPublisher.publishEvent(new ScoreChangedEvent(matchId));
     }
 
     // The only place where a delivery is scored. Used by both the simulator and the manual endpoint.
@@ -66,6 +69,7 @@ public class ScoringService {
         } else if (ball.isLegalDelivery() && after.legalBalls() % BALLS_PER_OVER == 0) {
             endOver(innings, after.legalBalls() / BALLS_PER_OVER);
         }
+        eventPublisher.publishEvent(new ScoreChangedEvent(matchId));
     }
 
     private Match findMatch(Long matchId) {

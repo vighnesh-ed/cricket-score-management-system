@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -45,9 +46,11 @@ public class GlobalExceptionHandler {
         return error(HttpStatus.BAD_REQUEST, "Request body is missing or malformed", request);
     }
 
+    // The content type is set explicitly so the JSON error is also returned to clients that only
+    // accept text/event-stream, such as a browser EventSource opening /stream.
     private ResponseEntity<ErrorResponse> error(HttpStatus status, String message, HttpServletRequest request) {
         ErrorResponse body = new ErrorResponse(LocalDateTime.now(), status.value(), status.getReasonPhrase(),
                 message, request.getRequestURI());
-        return ResponseEntity.status(status).body(body);
+        return ResponseEntity.status(status).contentType(MediaType.APPLICATION_JSON).body(body);
     }
 }
