@@ -40,12 +40,20 @@ public class DataSeeder implements CommandLineRunner {
         Team india = teamRepository.save(new Team("India", "IND"));
         Team australia = teamRepository.save(new Team("Australia", "AUS"));
 
+        Team england = teamRepository.save(new Team("England", "ENG"));
+        Team southAfrica = teamRepository.save(new Team("South Africa", "RSA"));
+
         playerRepository.saveAll(indiaPlayers(india));
         playerRepository.saveAll(australiaPlayers(australia));
+        playerRepository.saveAll(englandPlayers(england));
+        playerRepository.saveAll(southAfricaPlayers(southAfrica));
 
-        matchRepository.save(new Match(india, australia, "Wankhede Stadium, Mumbai", 20, LocalDateTime.now()));
+        LocalDateTime now = LocalDateTime.now();
+        matchRepository.save(new Match(india, australia, "Wankhede Stadium, Mumbai", 20, now));
+        matchRepository.save(new Match(india, england, "Eden Gardens, Kolkata", 20, now.plusHours(1)));
+        matchRepository.save(new Match(australia, southAfrica, "Melbourne Cricket Ground", 20, now.plusHours(2)));
 
-        log.info("Seeded 2 teams, 22 players and 1 match");
+        log.info("Seeded 4 teams, 44 players and 3 matches");
     }
 
     // Both squads are listed in batting order.
@@ -77,5 +85,35 @@ public class DataSeeder implements CommandLineRunner {
                 new Player("Mitchell Starc", BOWLER, team),
                 new Player("Adam Zampa", BOWLER, team),
                 new Player("Josh Hazlewood", BOWLER, team));
+    }
+
+    private List<Player> englandPlayers(Team team) {
+        return List.of(
+                new Player("Zak Crawley", BATSMAN, team),
+                new Player("Ben Duckett", BATSMAN, team),
+                new Player("Joe Root", BATSMAN, team),
+                new Player("Harry Brook", BATSMAN, team),
+                new Player("Jos Buttler", WICKET_KEEPER, team),
+                new Player("Ben Stokes", ALL_ROUNDER, team),
+                new Player("Liam Livingstone", ALL_ROUNDER, team),
+                new Player("Sam Curran", ALL_ROUNDER, team),
+                new Player("Jofra Archer", BOWLER, team),
+                new Player("Adil Rashid", BOWLER, team),
+                new Player("Mark Wood", BOWLER, team));
+    }
+
+    private List<Player> southAfricaPlayers(Team team) {
+        return List.of(
+                new Player("Quinton de Kock", WICKET_KEEPER, team),
+                new Player("Temba Bavuma", BATSMAN, team),
+                new Player("Aiden Markram", BATSMAN, team),
+                new Player("Rassie van der Dussen", BATSMAN, team),
+                new Player("David Miller", BATSMAN, team),
+                new Player("Heinrich Klaasen", WICKET_KEEPER, team),
+                new Player("Marco Jansen", ALL_ROUNDER, team),
+                new Player("Kagiso Rabada", BOWLER, team),
+                new Player("Keshav Maharaj", BOWLER, team),
+                new Player("Anrich Nortje", BOWLER, team),
+                new Player("Tabraiz Shamsi", BOWLER, team));
     }
 }

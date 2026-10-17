@@ -12,5 +12,7 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
     // Players are seeded in batting order, so id order is batting order.
     List<Player> findByTeamOrderByIdAsc(Team team);
 
+    List<Player> findAllByOrderByIdAsc();
+
     List<Player> findByTeamAndRoleInOrderByIdDesc(Team team, Collection<PlayerRole> roles);
 }

@@ -2,8 +2,12 @@ package com.cricket.cms.controller;
 
 import com.cricket.cms.dto.BallRequest;
 import com.cricket.cms.dto.MatchResponse;
+import com.cricket.cms.dto.MatchSummaryResponse;
 import com.cricket.cms.dto.ScoreResponse;
+import com.cricket.cms.dto.ScorecardResponse;
 import com.cricket.cms.service.MatchService;
+import com.cricket.cms.service.MatchSummaryService;
+import com.cricket.cms.service.ScorecardService;
 import com.cricket.cms.service.ScoreStreamService;
 import com.cricket.cms.service.ScoreboardService;
 import com.cricket.cms.service.ScoringService;
@@ -27,6 +31,8 @@ public class MatchController {
     private final ScoringService scoringService;
     private final ScoreboardService scoreboardService;
     private final ScoreStreamService scoreStreamService;
+    private final ScorecardService scorecardService;
+    private final MatchSummaryService matchSummaryService;
 
     @GetMapping
     public List<MatchResponse> getAllMatches() {
@@ -36,6 +42,16 @@ public class MatchController {
     @GetMapping("/{id}/score")
     public ScoreResponse getScore(@PathVariable Long id) {
         return scoreboardService.getScore(id);
+    }
+
+    @GetMapping("/{id}/scorecard")
+    public ScorecardResponse getScorecard(@PathVariable Long id) {
+        return scorecardService.getScorecard(id);
+    }
+
+    @GetMapping("/{id}/summary")
+    public MatchSummaryResponse getSummary(@PathVariable Long id) {
+        return matchSummaryService.getSummary(id);
     }
 
     @GetMapping("/{id}/stream")

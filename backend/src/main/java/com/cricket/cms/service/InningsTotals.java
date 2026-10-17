@@ -24,14 +24,27 @@ public record InningsTotals(int runs, int wickets, int legalBalls) {
     }
 
     public String overs() {
-        return legalBalls / BALLS_PER_OVER + "." + legalBalls % BALLS_PER_OVER;
+        return formatOvers(legalBalls);
     }
 
     public double runRate() {
+        return ratePerOver(runs, legalBalls);
+    }
+
+    // Cricket notation: 14 legal balls is "2.2" overs, not 2.33.
+    public static String formatOvers(int legalBalls) {
+        return legalBalls / BALLS_PER_OVER + "." + legalBalls % BALLS_PER_OVER;
+    }
+
+    // Runs per over, rounded to 2 decimals. Used for run rate and bowling economy.
+    public static double ratePerOver(int runs, int legalBalls) {
         if (legalBalls == 0) {
             return 0.0;
         }
-        double rate = runs * (double) BALLS_PER_OVER / legalBalls;
-        return Math.round(rate * 100) / 100.0;
+        return round2(runs * (double) BALLS_PER_OVER / legalBalls);
+    }
+
+    public static double round2(double value) {
+        return Math.round(value * 100) / 100.0;
     }
 }
